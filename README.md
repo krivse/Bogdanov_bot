@@ -46,6 +46,7 @@ pip install -r requirements.txt
 ```
 #### Запустить проект:
 ```angular2html
+Переименовать файл .env.dist -> .env. В файле обязательные поля для изменения: BOT_TOKEN, GROUP 
 python bot.py
 ```
 #### Запуск проекта в докере:
