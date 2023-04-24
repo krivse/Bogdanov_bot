@@ -18,7 +18,7 @@ def config_weather(token) -> OWM:
     return manage_weather
 
 
-def get_weather(city, mgr) -> Union[dict[str, Union[str, Any]], bool]:
+async def get_weather(city, mgr) -> Union[dict[str, Union[str, Any]], bool]:
     """
     Получение погоды для разных городов по API (OpenWeatherMap).
     :param city: наименование города
@@ -27,7 +27,10 @@ def get_weather(city, mgr) -> Union[dict[str, Union[str, Any]], bool]:
     """
     w = {}
     try:
-        weather = mgr.weather_at_place(city)
+
+        from bot import loop
+        # запускает выполнение этой функции в отдельном потоке и продолжает выполнять асинхронный код в текущем потоке
+        weather = await loop.run_in_executor(None, mgr.weather_at_place, city)
         w['temp'] = weather.weather.temperature('celsius')['temp']
         w['description'] = weather.weather.detailed_status
         w['location'] = weather.location.name

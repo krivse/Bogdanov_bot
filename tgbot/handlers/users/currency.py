@@ -73,7 +73,7 @@ async def get_currency_conversion(message: Message, state: FSMContext, list_curr
         base_currency = data.get('base_currency')
         currency_to = data.get('list_currency_to')
         amount = float(message.text)
-        result = currency_conversion(base_currency, amount, currency_to)
+        result = await currency_conversion(base_currency, amount, currency_to)
         await message.answer(result)
 
         # сброс состояния пользователя с данными

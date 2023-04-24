@@ -26,7 +26,7 @@ async def get_weather_handler(message: Message, own, state: FSMContext):
     msg_city = message.text
 
     if isinstance(msg_city, str) and msg_city not in commands:
-        w = get_weather(msg_city, own)
+        w = await get_weather(msg_city, own)
         if isinstance(w, dict):
             await message.answer(
                 f'Сегодня: {w.get("time")}\n'

@@ -18,6 +18,7 @@ from tgbot.handlers.errors import register_errors_handler
 from tgbot.middlewares.environment import EnvironmentMiddleware
 
 logger = logging.getLogger(__name__)
+loop = asyncio.get_event_loop()
 
 
 def register_all_middlewares(dp, config, own):
@@ -73,6 +74,6 @@ async def main():
 
 if __name__ == '__main__':
     try:
-        asyncio.run(main())
+        loop.run_until_complete(main())
     except (KeyboardInterrupt, SystemExit):
         logger.error("Bot stopped!")
