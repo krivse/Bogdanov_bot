@@ -37,11 +37,11 @@ async def question_setting(message: Message, state: FSMContext):
     """Настройка вопроса для голосования"""
     question = message.text
     if question not in commands:
-        await message.answer(
+        msg_for_delete_poll = await message.answer(
             'Напишите ответ и отправьте. После ввода всех ответов нажмите на кнопку "Далее".'
             'Количество ответов может быть от 2 до 10 включительно, каждый из 1-100 символов',
             reply_markup=options_poll)
-        await state.update_data(question=question)
+        await state.update_data(question=question, msg_for_delete_poll=msg_for_delete_poll.message_id)
         await PollState.options.set()
     else:
         await message.answer('Вопрос должен состояить из 1-255 символов.'
