@@ -81,3 +81,11 @@ cancel_poll = InlineKeyboardMarkup(
         ]
     ]
 )
+
+cancel_weather = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [
+            InlineKeyboardButton(text='Отмена', callback_data='cancel_weather')
+        ]
+    ]
+)

@@ -9,22 +9,28 @@ from tgbot.misc.states import PollState
 from tgbot.services.set_commands import commands
 
 
-async def polling_handler(message: Message):
+async def polling_handler(message: Message, state: FSMContext):
     """Создание голосования в группе."""
-    await message.answer(
+    msg_for_delete_poll = await message.answer(
         'Напишите вопрос для голосования',
         reply_markup=cancel_poll
     )
     await PollState.question.set()
 
+    # передаем в машину-состоние сообщение для удаления
+    await state.update_data(msg_for_delete_poll=msg_for_delete_poll.message_id)
 
-async def polling_handler_inline(call: CallbackQuery):
+
+async def polling_handler_inline(call: CallbackQuery, state: FSMContext):
     """Создание голосования в группе inline-режиим."""
-    await call.message.answer(
+    msg_for_delete_poll = await call.message.answer(
         'Напишите вопрос для голосования',
         reply_markup=cancel_poll
     )
     await PollState.question.set()
+
+    # передаем в машину-состоние сообщение для удаления
+    await state.update_data(msg_for_delete_poll=msg_for_delete_poll.message_id)
 
 
 async def question_setting(message: Message, state: FSMContext):
@@ -85,10 +91,15 @@ async def options_next(call: CallbackQuery, state: FSMContext, list_options):
 
 
 async def poll_cancel(call: CallbackQuery, state: FSMContext, list_options: list):
-    """Сброс мащина-состояния и списка ответов."""
-    await call.message.answer('Можете начать сначала /create_poll')
-    await state.finish()
+    """Сброс мащина-состояния и списка ответов / удаление информационного сообщения / удаление клавиатуры."""
+    # удаление клавиатуры
     await call.message.edit_reply_markup()
+    # удаление сообщения
+    msg_for_delete_poll = (await state.get_data()).get('msg_for_delete_poll')
+    await call.bot.delete_message(chat_id=call.from_user.id, message_id=msg_for_delete_poll)
+    # сброс состояния пользователя
+    await state.finish()
+    # сброс списка ответов
     list_options.clear()
 
 

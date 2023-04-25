@@ -32,5 +32,5 @@ async def random_image_handler_inline(call: CallbackQuery):
 
 
 def register_user_image(dp: Dispatcher):
-    dp.register_message_handler(random_image_handler, Command('random_aimage'), content_types=ContentType.TEXT)
+    dp.register_message_handler(random_image_handler, Command('random_image'), content_types=ContentType.TEXT)
     dp.register_callback_query_handler(random_image_handler_inline, text='honey_animals')

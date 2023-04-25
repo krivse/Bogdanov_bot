@@ -86,11 +86,11 @@ async def get_currency_conversion(message: Message, state: FSMContext, list_curr
 
 
 async def cancel_menu_with_list_currency(call: CallbackQuery, state: FSMContext):
-    """Удаление клавиатуры / информационного сообщения."""
+    """Удаление клавиатуры / сброс машина-состояния / информационного сообщения."""
     msg_for_delete_currency = (await state.get_data()).get('msg_for_delete_currency')
     await call.message.edit_reply_markup()
     await call.bot.delete_message(chat_id=call.from_user.id, message_id=msg_for_delete_currency)
-    await state.reset_state(with_data=False)
+    await state.finish()
 
 
 def register_user_currency(dp: Dispatcher):
